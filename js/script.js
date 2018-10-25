@@ -1,5 +1,5 @@
 class Paddle {
-    constructor(width = 20, height = 20, color = 'white', positionX = canvas.width / 2 - width, positionY = canvas.height / 2 - height) {
+    constructor(positionX = 10, positionY = 10, width = 20, height = 100, color = 'white') {
         this.width = width;
         this.height = height;
         this.color = color;
@@ -10,6 +10,7 @@ class Paddle {
         this.speed = 6;
     }
     autoMove(ballsGame) {
+        // console.log('ok');
         let minX = canvas.width; //minimal value of distance 
         let tempMinX = canvas.width; //temprorary distance value of iteration
         let tempObject; //number of object with the smallest distance
@@ -25,7 +26,8 @@ class Paddle {
             }
 
         }
-        if (ballsGame[tempObject].middleHeight > this.middleHeight) {
+        if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight > this.positionY + this.middleHeight) {
+
             if (minX > (canvas.width / 2)) {
                 this.moveDown(ballsGame);
             } else {
@@ -36,6 +38,7 @@ class Paddle {
             }
 
         } else {
+            // console.log("ok");
             if (minX > (canvas.width / 2)) {
                 this.moveUp(ballsGame);
             } else {
@@ -104,98 +107,9 @@ class Paddle {
     }
 }
 
-//variables
-const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
-const playerPoints = document.querySelector(".pointsPlayer");
-const computerPoints = document.querySelector(".pointsComputer");
-const resetButton = document.querySelector(".reset");
-
-let numberofBalls = 1;
-const addBallButton = document.querySelector(".addBall");
-addBallButton.addEventListener('click', () => {
-    const tempBall = new Ball(20, 'black', canvas.width / 2 - 10, canvas.height / 2 - 10);
-    ballsGame.push(tempBall);
-    collisionObjects.push(tempBall);
-});
-
-const removeBallButton = document.querySelector(".removeBall");
-removeBallButton.addEventListener('click', () => {
-    if (ballsGame.length > 2)
-        ballsGame.pop();
-    if (collisionObjects.length > 3)
-        collisionObjects.pop();
-});
-
-
-let activeGame = true;
-let activeMouse = true;
-let activeKeyboard = true;
-let gameWidth;
-let playerWins = 0;
-let computerWins = 0;
-let difficult = 0.1;
-
-//************************
-//ADMIN MODE CONFIGURATION (if not used, all comment)
-// let adminMode = false;
-
-//setting canvas size
-canvas.width = 1000;
-canvas.height = 500;
-
-const refreshGameWindow = () => {
-    gameWidth = canvas.width;
-    paddleComputer.positionX = canvas.width - paddleComputer.width - 10;
-}
-
-function mouseSupportForPlayer(e) {
-    if (activeGame && activeMouse) {
-        if (e.clientY - canvas.offsetTop > paddlePlayer.middleHeight && e.clientY - canvas.offsetTop < canvas.offsetHeight - paddlePlayer.middleHeight) {
-            paddlePlayer.positionY = e.clientY - canvas.offsetTop - paddlePlayer.middleHeight;
-        }
-    }
-};
-
-function keyboardSupportForPlayer(e) {
-    if (activeKeyboard) {
-        if (e.keyCode == 87)
-            paddlePlayer.moveUp(ballsGame);
-        else if (e.keyCode == 83)
-            paddlePlayer.moveDown(ballsGame);
-        if (e.keyCode == 80)
-            paddleComputer.moveUp(collisionObjects);
-        else if (e.keyCode == 186)
-            paddleComputer.moveDown(collisionObjects);
-    }
-}
-
-canvas.addEventListener("mousemove", mouseSupportForPlayer);
-window.addEventListener("keydown", keyboardSupportForPlayer);
-resetButton.addEventListener("click", () => {
-    clearInterval(timer);
-    playerWins = 0;
-    computerWins = 0;
-    ballsGame.forEach(ballGame => {
-        ballGame.resetBall();
-    })
-    timer = setInterval(run, 1000 / 60);
-});
-
-const clearScreen = () => {
-    ctx.fillStyle = "lightgrey";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-//array with all activ game elements (paddels, balls)
-const collisionObjects = [];
-const ballsGame = [];
-
-//object Paddle
-
-
 class Ball {
 
-    constructor(size, color, positionX, positionY) {
+    constructor(size = 20, color = 'white', positionX = canvas.width / 2 - size / 2, positionY = canvas.height / 2 - size / 2) {
         this.width = size;
         this.height = size;
         this.positionX = positionX;
@@ -355,10 +269,101 @@ class Ball {
     }
 }
 
-const ball = new Ball(20, "black", 10, canvas.height / 2 - 30);
+//variables
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
+const playerPoints = document.querySelector(".pointsPlayer");
+const computerPoints = document.querySelector(".pointsComputer");
+const resetButton = document.querySelector(".reset");
 
-const paddlePlayer = new Paddle(20, 100, "green", 10, 10);
-const paddleComputer = new Paddle(20, 100, "red", 0, 10);
+let numberofBalls = 1;
+const addBallButton = document.querySelector(".addBall");
+addBallButton.addEventListener('click', () => {
+    const tempBall = new Ball;
+    ballsGame.push(tempBall);
+    collisionObjects.push(tempBall);
+});
+
+const removeBallButton = document.querySelector(".removeBall");
+removeBallButton.addEventListener('click', () => {
+    if (ballsGame.length > 2)
+        ballsGame.pop();
+    if (collisionObjects.length > 3)
+        collisionObjects.pop();
+});
+
+
+let activeGame = true;
+let activeMouse = true;
+let activeKeyboard = true;
+let gameWidth;
+let playerWins = 0;
+let computerWins = 0;
+let difficult = 0.1;
+
+//************************
+//ADMIN MODE CONFIGURATION (if not used, all comment)
+// let adminMode = false;
+
+//setting canvas size
+canvas.width = 1000;
+canvas.height = 500;
+
+const refreshGameWindow = () => {
+    gameWidth = canvas.width;
+    paddleComputer.positionX = canvas.width - paddleComputer.width - 10;
+}
+
+function mouseSupportForPlayer(e) {
+    if (activeGame && activeMouse) {
+        if (e.clientY - canvas.offsetTop > paddlePlayer.middleHeight && e.clientY - canvas.offsetTop < canvas.offsetHeight - paddlePlayer.middleHeight) {
+            paddlePlayer.positionY = e.clientY - canvas.offsetTop - paddlePlayer.middleHeight;
+        }
+    }
+};
+
+function keyboardSupportForPlayer(e) {
+    if (activeKeyboard) {
+        if (e.keyCode == 87)
+            paddlePlayer.moveUp(ballsGame);
+        else if (e.keyCode == 83)
+            paddlePlayer.moveDown(ballsGame);
+        if (e.keyCode == 80)
+            paddleComputer.moveUp(ballsGame);
+        else if (e.keyCode == 186)
+            paddleComputer.moveDown(ballsGame);
+    }
+}
+
+canvas.addEventListener("mousemove", mouseSupportForPlayer);
+window.addEventListener("keydown", keyboardSupportForPlayer);
+resetButton.addEventListener("click", () => {
+    clearInterval(timer);
+    playerWins = 0;
+    computerWins = 0;
+    ballsGame.forEach(ballGame => {
+        ballGame.resetBall();
+    })
+    timer = setInterval(run, 1000 / 60);
+});
+
+const clearScreen = () => {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+//array with all activ game elements (paddels, balls)
+const collisionObjects = [];
+const ballsGame = [];
+
+//object Paddle
+
+
+
+
+const ball = new Ball();
+
+const paddlePlayer = new Paddle();
+const paddleComputer = new Paddle(canvas.width - 10);
 
 collisionObjects.push(paddlePlayer, paddleComputer, ball);
 ballsGame.push(ball);
