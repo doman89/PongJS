@@ -1,5 +1,9 @@
 // font-family: 'Roboto', sans-serif;
-    
+*
+    padding: 0
+    margin: 0
+    box-sizing: border-box
+
 html
     font-family: 'Roboto', Arial, sans-serif
     font-size: 10px
@@ -10,20 +14,73 @@ html
         align-items: center
         min-height: 100vh
         color: white
-        div
+        .container
+            margin: 5% auto
             display: flex
             flex-direction: column
-            justify-content: center
-            align-items: center
-            box-shadow: 0 0 0 2px black, 0 0 0 4px red
-            div
-                align-self: stretch
+            justify-content: flex-start
+            align-items: stretch
+            border: 1px solid red
+            .gameInfo
                 display: flex
                 flex-direction: row
+                justify-content: flex-start
+                // font-size: 1.5em
                 div
+                    line-height: 200%
+                    font-size: 3em
                     flex-basis: 10%
-                    font-size: 3em
-                h1
-                    flex-basis: 80%
                     text-align: center
+                h1
+                    line-height: 200%
                     font-size: 3em
+                    border-left: 1px solid red
+                    border-right: 1px solid red
+                    flex-grow: 1
+                    text-align: center
+                    padding: 3px
+            .buttonsGame
+                    display: flex
+                    flex-direction: row
+                    justify-content: space-around
+                    button
+                        font-size: 1.5em
+                        margin-top: 5px
+                        margin-bottom: 5px
+                        border: 1px solid red
+                        padding: 2px 5px
+                        background-color: transparent
+                        color: white
+                        transition: 0.3s
+                        &:hover
+                            background-color: #f00
+                            cursor: pointer
+                        
+
+            // div
+            //     // align-self: stretch
+            //     display: flex
+            //     flex-direction: row
+            //     justify-content: flex-start
+            //     // align-items: stretch
+            //     &.buttonsGame
+            //         button
+            //             margin: 2px 2px
+            //             color: white
+            //             background-color: transparent
+            //             border: 1px solid red
+            //             transition: 0.3s
+            //             &:hover
+            //                 cursor: pointer
+            //                 background-color: #ff0000
+            //     div
+            //         // height: 100%
+            //         flex-basis: 10%
+            //         font-size: 3em
+            //     h1
+            //         flex-basis: 80%
+            //         text-align: center
+            //         font-size: 3em
+            canvas
+                border-top: 1px solid red
+                border-bottom: 1px solid red

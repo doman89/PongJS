@@ -1,13 +1,24 @@
-class Paddle {
-    constructor(positionX = 10, positionY = 10, width = 20, height = 100, color = 'white') {
-        this.width = width;
-        this.height = height;
-        this.color = color;
+class Point {
+    constructor(positionX = canvas.width / 2, positionY = canvas.height / 2, color = 'white') {
         this.positionX = positionX;
         this.positionY = positionY;
+        this.color = color;
+    }
+}
+
+class Rectangle extends Point {
+    constructor(positionX, positionY, color, width = 20, height = 20) {
+        super(positionX, positionY, color);
+        this.width = width;
+        this.height = height;
         this.middleHeight = height / 2;
-        this.middleWidth = width / 2;
-        this.speed = 6;
+    }
+}
+
+class Paddle extends Rectangle {
+    constructor(positionX = 10, positionY, color, width = 20, height = 100) {
+        super(positionX, positionY, color, width, height)
+        this.speed = ballSpeed;
     }
     autoMove(ballsGame) {
         // console.log('ok');
@@ -238,6 +249,8 @@ const ctx = canvas.getContext("2d");
 const playerPoints = document.querySelector(".pointsPlayer");
 const computerPoints = document.querySelector(".pointsComputer");
 const resetButton = document.querySelector(".reset");
+const paddelSpeed = 3;
+const ballSpeed = 6;
 
 let numberofBalls = 1;
 const addBallButton = document.querySelector(".addBall");
@@ -360,9 +373,8 @@ const run = () => {
     paddleComputer.autoMove(ballsGame);
     drawObject(collisionObjects, ctx);
     updateScore();
-    // if (playerWins > 9 || computerWins > 9)
-    //     clearInterval(timer);0
-
+    if (playerWins > 9 || computerWins > 9)
+        clearInterval(timer);
 }
 
 let timer = setInterval(run, 1000 / 50);
