@@ -169,7 +169,7 @@ class Ball {
                     break;
                 } else if (ballRight + this.speedX > canvas.width) {
                     collision = 2;
-                    playerWins++;
+                    playerWins.increasePoints();
                     break;
                 } else if (ballBottom + this.speedY > canvas.height) {
                     collision = 3;
@@ -181,7 +181,7 @@ class Ball {
                     break;
                 } else if (ballRight + this.speedX > canvas.width) {
                     collision = 2;
-                    playerWins++;
+                    playerWins.increasePoints();
                     break;
                 } else if (ballTop - this.speedY < 0) {
                     collision = 3;
@@ -193,7 +193,7 @@ class Ball {
                     break;
                 } else if (ballLeft - this.speedX < 0) {
                     collision = 2;
-                    computerWins++;
+                    computerWins.increasePoints();
                     break;
                 } else if (ballBottom + this.speedY > canvas.height) {
                     collision = 3;
@@ -205,7 +205,7 @@ class Ball {
                     break;
                 } else if (ballLeft - this.speedX < 0) {
                     collision = 2;
-                    computerWins++;
+                    computerWins.increasePoints();
                     break;
                 } else if (ballTop - this.speedY < 0) {
                     collision = 3;
@@ -243,6 +243,15 @@ class Ball {
     }
 }
 
+class scoreBoard {
+    constructor() {
+        let points = 0;
+        this.getPoints = () => points;
+        this.increasePoints = () => points++;
+        this.resetPoints = () => points = 0;
+    }
+}
+
 //variables
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -273,8 +282,8 @@ let activeGame = true;
 let activeMouse = true;
 let activeKeyboard = true;
 let gameWidth;
-let playerWins = 0;
-let computerWins = 0;
+const playerWins = new scoreBoard;
+const computerWins = new scoreBoard;
 let difficult = 0.1;
 
 //************************
@@ -315,8 +324,8 @@ canvas.addEventListener("mousemove", mouseSupportForPlayer);
 window.addEventListener("keydown", keyboardSupportForPlayer);
 resetButton.addEventListener("click", () => {
     clearInterval(timer);
-    playerWins = 0;
-    computerWins = 0;
+    playerWins.resetPoints();
+    computerWins.resetPoints();
     ballsGame.forEach(ballGame => {
         ballGame.resetBall();
     })
@@ -359,8 +368,8 @@ const ballsMove = ballsGame => {
 }
 
 const updateScore = () => {
-    playerPoints.textContent = playerWins;
-    computerPoints.textContent = computerWins;
+    playerPoints.textContent = playerWins.getPoints();
+    computerPoints.textContent = computerWins.getPoints();
 }
 
 const run = () => {
@@ -373,7 +382,7 @@ const run = () => {
     paddleComputer.autoMove(ballsGame);
     drawObject(collisionObjects, ctx);
     updateScore();
-    if (playerWins > 9 || computerWins > 9)
+    if (playerWins.getPoints() > 9 || computerWins.getPoints() > 9)
         clearInterval(timer);
 }
 
