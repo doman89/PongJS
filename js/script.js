@@ -23,7 +23,6 @@ class Paddle extends Rectangle {
         this.speed = ballSpeed;
     }
     autoMove(ballsGame) {
-        // console.log('ok');
         let minX = canvas.width; //minimal value of distance 
         let tempMinX = canvas.width; //temprorary distance value of iteration
         let tempObject; //number of object with the smallest distance
@@ -40,24 +39,32 @@ class Paddle extends Rectangle {
 
         }
         if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight > this.positionY + this.middleHeight) {
-
-            if (minX > (canvas.width / 2)) {
+            if (this.positionY + this.middleHeight + this.speed > ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight) {
+                if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight + this.height > canvas.height)
+                    this.positionY = canvas.height - this.height;
+                else
+                    this.positionY = ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight;
+            } else if (minX > (canvas.width / 2)) {
                 this.moveDown(ballsGame);
             } else {
-                this.speed *= 1.4;
+                this.speed *= 2;
                 this.moveDown(ballsGame);
-                this.speed *= 0.71428;
+                this.speed /= 2;
                 this.speed = Math.round(this.speed);
             }
 
         } else {
-            // console.log("ok");
-            if (minX > (canvas.width / 2)) {
+            if (this.positionY + this.middleHeight - this.speed > ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight) {
+                if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight < 0)
+                    this.positionY = 0;
+                else
+                    this.positionY = ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight;
+            } else if (minX > (canvas.width / 2)) {
                 this.moveUp(ballsGame);
             } else {
-                this.speed *= 1.4;
+                this.speed *= 2;
                 this.moveUp(ballsGame);
-                this.speed *= 0.71428;
+                this.speed /= 2;
                 this.speed = Math.round(this.speed);
             }
 
@@ -121,7 +128,6 @@ class Paddle extends Rectangle {
 }
 
 class Ball {
-
     constructor(size = 20, color = 'white', positionX = canvas.width / 2 - size / 2, positionY = canvas.height / 2 - size / 2) {
         this.width = size;
         this.height = size;
@@ -255,6 +261,7 @@ let activeGame = true;
 let activeMouse = true;
 let activeKeyboard = true;
 let gameWidth;
+let difficult = 0.1;
 const playerWins = new scoreBoard;
 const computerWins = new scoreBoard;
 //#endregion variables
