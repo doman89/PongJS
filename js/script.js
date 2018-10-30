@@ -1,3 +1,5 @@
+//#region allClasses
+
 class Point {
     constructor(positionX = canvas.width / 2, positionY = canvas.height / 2, color = 'white') {
         this.positionX = positionX;
@@ -239,17 +241,27 @@ class scoreBoard {
         this.resetPoints = () => points = 0;
     }
 }
+//#endregion
 
-//variables
+//#region variables
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const playerPoints = document.querySelector(".pointsPlayer");
 const computerPoints = document.querySelector(".pointsComputer");
 const resetButton = document.querySelector(".reset");
-const paddelSpeed = 3;
+const paddelSpeed = 2;
 const ballSpeed = 6;
+let activeGame = true;
+let activeMouse = true;
+let activeKeyboard = true;
+let gameWidth;
+const playerWins = new scoreBoard;
+const computerWins = new scoreBoard;
+//#endregion variables
 
-let numberofBalls = 1;
+canvas.width = 1000;
+canvas.height = 500;
+
 const addBallButton = document.querySelector(".addBall");
 addBallButton.addEventListener('click', () => {
     const tempBall = new Ball;
@@ -265,22 +277,6 @@ removeBallButton.addEventListener('click', () => {
         collisionObjects.pop();
 });
 
-
-let activeGame = true;
-let activeMouse = true;
-let activeKeyboard = true;
-let gameWidth;
-const playerWins = new scoreBoard;
-const computerWins = new scoreBoard;
-let difficult = 0.1;
-
-//************************
-//ADMIN MODE CONFIGURATION (if not used, all comment)
-// let adminMode = false;
-
-//setting canvas size
-canvas.width = 1000;
-canvas.height = 500;
 
 const refreshGameWindow = () => {
     gameWidth = canvas.width;
@@ -324,26 +320,10 @@ const clearScreen = () => {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-//array with all activ game elements (paddels, balls)
-const collisionObjects = [];
-const ballsGame = [];
 
-//object Paddle
-
-
-
-
-const ball = new Ball();
-
-const paddlePlayer = new Paddle();
-const paddleComputer = new Paddle(canvas.width - 10);
-
-collisionObjects.push(paddlePlayer, paddleComputer, ball);
-ballsGame.push(ball);
 //function drawing object on canvas
 const drawObject = (drawingObjects, context) => {
     drawingObjects.forEach(drawingObject => {
-        context.lineJoin = "round";
         context.fillStyle = drawingObject.color;
         context.fillRect(drawingObject.positionX, drawingObject.positionY, drawingObject.width, drawingObject.height);
     })
@@ -360,13 +340,22 @@ const updateScore = () => {
     computerPoints.textContent = computerWins.getPoints();
 }
 
+//array with all activ game elements (paddels, balls)
+const collisionObjects = [];
+const ballsGame = [];
+
+const ball = new Ball();
+const paddlePlayer = new Paddle();
+const paddleComputer = new Paddle(canvas.width - 10);
+
+collisionObjects.push(paddlePlayer, paddleComputer, ball);
+ballsGame.push(ball);
+
 const run = () => {
     if (!(canvas.width === gameWidth))
         refreshGameWindow();
     clearScreen();
-    // paddleComputer.autoMove(collisionObjects);
     ballsMove(ballsGame);
-    // paddlePlayer.autoMove(collisionObjects);
     paddleComputer.autoMove(ballsGame);
     drawObject(collisionObjects, ctx);
     updateScore();
