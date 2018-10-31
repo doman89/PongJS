@@ -25,7 +25,7 @@ class Paddle extends Rectangle {
     autoMove(ballsGame) {
         let minX = canvas.width; //minimal value of distance 
         let tempMinX = canvas.width; //temprorary distance value of iteration
-        let tempObject; //number of object with the smallest distance
+        let n; //number of object with the smallest distance
         for (let i = 0; i < ballsGame.length; i++) {
             if (ballsGame[i].positionX > this.positionX) {
                 tempMinX = ballsGame[i].positionX - this.positionX;
@@ -34,40 +34,26 @@ class Paddle extends Rectangle {
             }
             if (tempMinX < minX) {
                 minX = tempMinX;
-                tempObject = i;
+                n = i;
             }
 
         }
-        if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight > this.positionY + this.middleHeight) {
-            if (this.positionY + this.middleHeight + this.speed > ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight) {
-                if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight + this.height > canvas.height)
-                    this.positionY = canvas.height - this.height;
-                else
-                    this.positionY = ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight;
-            } else if (minX > (canvas.width / 2)) {
+        if (this.positionY + this.middleHeight == ball.positionX + this.middleHeight)
+            return;
+        else if (this.positionY + this.middleHeight < ballsGame[n].positionY + ballsGame[n].middleHeight) {
+            if (this.positionY + this.height + 1 > canvas.height)
+                return;
+            else if (this.positionY + this.height + this.speed > canvas.height)
+                this.positionY = canvas.height - this.height;
+            else
                 this.moveDown(ballsGame);
-            } else {
-                this.speed *= 2;
-                this.moveDown(ballsGame);
-                this.speed /= 2;
-                this.speed = Math.round(this.speed);
-            }
-
         } else {
-            if (this.positionY + this.middleHeight - this.speed > ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight) {
-                if (ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight < 0)
-                    this.positionY = 0;
-                else
-                    this.positionY = ballsGame[tempObject].positionY + ballsGame[tempObject].middleHeight - this.middleHeight;
-            } else if (minX > (canvas.width / 2)) {
+            if (this.positionY - 1 < 0)
+                return;
+            else if (this.positionY - this.speed < 0)
+                this.positionY = 0;
+            else
                 this.moveUp(ballsGame);
-            } else {
-                this.speed *= 2;
-                this.moveUp(ballsGame);
-                this.speed /= 2;
-                this.speed = Math.round(this.speed);
-            }
-
         }
     }
     moveUp(collisionObjects) {
