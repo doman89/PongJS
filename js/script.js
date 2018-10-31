@@ -122,13 +122,13 @@ class Ball {
         this.color = color;
         this.middleHeight = size / 2;
         this.speedX = 2;
-        this.speedY = 2;
+        this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
         this.directionX = true; //true -> right
         this.directionY = true; //true -> down
     }
     resetBall() {
         this.speedX = 2;
-        this.speedY = 2;
+        this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
         if (Math.round(Math.random()))
             this.directionX = true;
         else
@@ -199,10 +199,8 @@ class Ball {
             if (Math.round(Math.random())) {
                 if (this.speedX < 4)
                     this.speedX += difficult + (Math.random() / 10);
-            } else {
-                if (this.speedY < 4)
-                    this.speedY += difficult + (Math.random() / 10);
-            }
+            } else
+                this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
             if (collision == 1) {
                 this.directionX = !this.directionX;
                 if (Math.round(Math.random()))
@@ -247,7 +245,7 @@ let activeGame = true;
 let activeMouse = true;
 let activeKeyboard = true;
 let gameWidth;
-let difficult = 0.1;
+let difficult = 0.3;
 const playerWins = new scoreBoard;
 const computerWins = new scoreBoard;
 //#endregion variables
