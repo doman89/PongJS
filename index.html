@@ -20,9 +20,27 @@
 
         <canvas></canvas>
         <div class="buttonsGame">
-            <button class="reset">Reset Game!</button>
-            <button class="addBall">Add Ball to Game</button>
-            <button class="removeBall">Remove Ball from Game</button>
+            <div class="buttons">
+                <button class="reset">Reset Game!</button>
+                <button class="pause">Pause Game</button>
+                <button class="menu">Menu Game</button>
+            </div>
+            <div class="menuGame">
+                <form class="paddelOptions">
+                    <label for="paddelWidthInput">Paddel width :</label><input type="number" name="" id="paddelWidthInput">
+                    <label for="paddelHeightInput">Paddel height :</label><input type="number" name="" id="paddelHeightInput">
+                    <label for="paddelColorInput">Paddel color :</label><input type="text" name="" id="paddelColorInput">
+                    <label for="paddelSpeedInput">Paddel speed :</label><input type="number" name="" id="paddelSpeedInput">
+                </form>
+                <form class="ballOptions">
+                    <label for="ballSizeInput">Ball size :</label><input type="number" name="" id="ballSizeInput">
+                    <label for="ballColorInput">Ball color :</label><input type="text" name="" id="ballColorInput">
+                    <label for="ballSpeedInput">Ball max-speed Y:</label><input type="number" name="" id="ballSpeedInput">
+                </form>
+                <button class="addBall">Add Ball to Game</button>
+                <button class="removeBall">Remove Ball from Game</button>
+                <button class="save">Save changes</button>
+            </div>
         </div>
     </div>
     <script src="js/script.js"></script>

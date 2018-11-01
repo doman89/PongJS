@@ -20,7 +20,7 @@ class Rectangle extends Point {
 class Paddle extends Rectangle {
     constructor(positionX = 10, positionY, color, width = 20, height = 100) {
         super(positionX, positionY, color, width, height)
-        this.speed = ballSpeed;
+        this.speed = optionGame.ballSpeed;
     }
     autoMove(ballsGame) {
         let minX = canvas.width; //minimal value of distance 
@@ -38,7 +38,7 @@ class Paddle extends Rectangle {
             }
 
         }
-        if (this.positionY + this.middleHeight == ball.positionX + this.middleHeight)
+        if (this.positionY + this.middleHeight == ballsGame[n].positionX + ballsGame[n].middleHeight)
             return;
         else if (this.positionY + this.middleHeight < ballsGame[n].positionY + ballsGame[n].middleHeight) {
             if (this.positionY + this.height + 1 > canvas.height)
@@ -122,13 +122,13 @@ class Ball {
         this.color = color;
         this.middleHeight = size / 2;
         this.speedX = 2;
-        this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
+        this.speedY = (Math.random() * optionGame.ballSpeed).toFixed(2) * 1;
         this.directionX = true; //true -> right
         this.directionY = true; //true -> down
     }
     resetBall() {
         this.speedX = 2;
-        this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
+        this.speedY = (Math.random() * optionGame.ballSpeed).toFixed(2) * 1;
         if (Math.round(Math.random()))
             this.directionX = true;
         else
@@ -200,7 +200,7 @@ class Ball {
                 if (this.speedX < 4)
                     this.speedX += difficult + (Math.random() / 10);
             } else
-                this.speedY = (Math.random() * ballSpeed).toFixed(2) * 1;
+                this.speedY = (Math.random() * optionGame.ballSpeed).toFixed(2) * 1;
             if (collision == 1) {
                 this.directionX = !this.directionX;
                 if (Math.round(Math.random()))
@@ -239,8 +239,10 @@ const ctx = canvas.getContext("2d");
 const playerPoints = document.querySelector(".pointsPlayer");
 const computerPoints = document.querySelector(".pointsComputer");
 const resetButton = document.querySelector(".reset");
-const paddelSpeed = 2;
-const ballSpeed = 6;
+const menuGameButton = document.querySelector(".menu");
+const pauseGameButton = document.querySelector(".pause");
+const saveButton = document.querySelector(".save");
+let activePause = true;
 let activeGame = true;
 let activeMouse = true;
 let activeKeyboard = true;
@@ -248,6 +250,16 @@ let gameWidth;
 let difficult = 0.3;
 const playerWins = new scoreBoard;
 const computerWins = new scoreBoard;
+
+const optionGame = {
+    paddelWidth: 20,
+    paddelHeight: 100,
+    paddelSpeed: 2,
+    paddelColor: 'white',
+    ballSize: 20,
+    ballColor: 'white',
+    ballSpeed: 2,
+}
 //#endregion variables
 
 canvas.width = 1000;
@@ -255,7 +267,7 @@ canvas.height = 500;
 
 const addBallButton = document.querySelector(".addBall");
 addBallButton.addEventListener('click', () => {
-    const tempBall = new Ball;
+    const tempBall = new Ball(optionGame.ballSize, optionGame.ballColor);
     ballsGame.push(tempBall);
     collisionObjects.push(tempBall);
 });
@@ -330,6 +342,88 @@ const updateScore = () => {
     playerPoints.textContent = playerWins.getPoints();
     computerPoints.textContent = computerWins.getPoints();
 }
+
+pauseGameButton.addEventListener('click', () => {
+    if (activeGame)
+        clearInterval(timer);
+    else
+        timer = setInterval(run, 1000 / 60);
+    activeGame = !activeGame;
+})
+
+saveButton.addEventListener('click', () => {
+    if (document.getElementById('paddelWidthInput').value != optionGame.paddelWidth) {
+        optionGame.paddelWidth = document.getElementById('paddelWidthInput').value * 1;
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Paddle.prototype) {
+                object.width = optionGame.paddelWidth;
+            }
+        });
+        refreshGameWindow();
+    }
+    if (document.getElementById('paddelHeightInput').value != optionGame.paddelHeight) {
+        optionGame.paddelHeight = document.getElementById('paddelHeightInput').value * 1;
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Paddle.prototype) {
+                object.height = optionGame.paddelHeight;
+                object.middleHeight = object.height / 2;
+            }
+
+        });
+    }
+    if (document.getElementById('paddelColorInput').value != optionGame.paddelColor) {
+        optionGame.paddelColor = document.getElementById('paddelColorInput').value;
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Paddle.prototype)
+                object.color = optionGame.paddelColor;
+        });
+    }
+    if (document.getElementById('paddelSpeedInput').value != optionGame.paddelSpeed) {
+        optionGame.paddelSpeed = document.getElementById('paddelSpeedInput').value * 1;
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Paddle.prototype)
+                object.speed = optionGame.paddelSpeed;
+        });
+    };
+    if (document.getElementById('ballSizeInput').value != optionGame.ballSize) {
+        optionGame.ballSize = document.getElementById('ballSizeInput').value * 1;
+        ballsGame.forEach(ball => ball.width = ball.height = optionGame.ballSize);
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Ball.prototype)
+                object.width = object.height = optionGame.ballSize;
+        })
+    }
+    if (document.getElementById('ballColorInput').value != optionGame.ballColor) {
+        optionGame.ballColor = document.getElementById('ballColorInput').value;
+        ballsGame.forEach(ball => ball.color = optionGame.ballColor);
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Ball.prototype)
+                object.color = optionGame.ballColor;
+        })
+    };;
+    if (document.getElementById('ballSpeedInput').value != optionGame.ballSpeed) {
+        optionGame.ballSpeed = document.getElementById('ballSpeedInput').value * 1;
+        ballsGame.forEach(ball => ball.speed = optionGame.ballSpeed);
+        collisionObjects.forEach(object => {
+            if (object.__proto__ === Ball.prototype)
+                object.speed = optionGame.ballSpeed;
+        })
+    }
+    document.querySelector('.menuGame').classList.toggle('active');
+})
+
+menuGameButton.addEventListener('click', () => {
+    document.querySelector('.menuGame').classList.toggle('active');
+    if (document.querySelector('.menuGame').classList.contains('active')) {
+        document.getElementById('paddelWidthInput').value = optionGame.paddelWidth;
+        document.getElementById('paddelHeightInput').value = optionGame.paddelHeight;
+        document.getElementById('paddelColorInput').value = optionGame.paddelColor;
+        document.getElementById('paddelSpeedInput').value = optionGame.paddelSpeed;
+        document.getElementById('ballSizeInput').value = optionGame.ballSize;
+        document.getElementById('ballColorInput').value = optionGame.ballColor;
+        document.getElementById('ballSpeedInput').value = optionGame.ballSpeed;
+    }
+})
 
 //array with all activ game elements (paddels, balls)
 const collisionObjects = [];

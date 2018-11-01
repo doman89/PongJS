@@ -15,6 +15,7 @@ html
         min-height: 100vh
         color: white
         .container
+            max-width: 1000px
             margin: 5% auto
             display: flex
             flex-direction: column
@@ -40,21 +41,50 @@ html
                     text-align: center
                     padding: 3px
             .buttonsGame
+                display: flex
+                flex-direction: column
+                button
+                    font-size: 1.5em
+                    margin-top: 5px
+                    margin-bottom: 5px
+                    border: 1px solid red
+                    padding: 2px 5px
+                    background-color: transparent
+                    color: white
+                    transition: 0.3s
+                    &:hover
+                        background-color: #f00
+                        cursor: pointer
+                .buttons
                     display: flex
-                    flex-direction: row
                     justify-content: space-around
-                    button
+                .menuGame
+                    display: none
+                    overflow: hidden
+                    &.active
+                        border-top: 1px solid red
+                        display: flex
+                        flex-direction: row
+                        flex-wrap: wrap
+                        justify-content: space-around
+                    form
                         font-size: 1.5em
-                        margin-top: 5px
-                        margin-bottom: 5px
-                        border: 1px solid red
-                        padding: 2px 5px
-                        background-color: transparent
-                        color: white
-                        transition: 0.3s
-                        &:hover
-                            background-color: #f00
-                            cursor: pointer
+                        flex-basis: 50%
+                        label
+                            text-align: right
+                            display: inline-block
+                            margin-left: 10px
+                            width: 30%
+                        input
+                            display: inline-block
+                            font-size: 1.1em
+                            margin-left: 20px
+                            margin-top: 10px
+                            color: white
+                            background-color: transparent
+                            border: 1px solid red
+                            width: 50%
+
             canvas
                 border-top: 1px solid red
                 border-bottom: 1px solid red
