@@ -113,13 +113,9 @@ class Paddle extends Rectangle {
     }
 }
 
-class Ball {
+class Ball extends Rectangle {
     constructor(size = 20, color = 'white', positionX = canvas.width / 2 - size / 2, positionY = canvas.height / 2 - size / 2) {
-        this.width = size;
-        this.height = size;
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.color = color;
+        super(positionX, positionY, color, size, size);
         this.middleHeight = size / 2;
         this.speedX = 2;
         this.speedY = (Math.random() * optionGame.ballSpeed).toFixed(2) * 1;
@@ -410,6 +406,7 @@ saveButton.addEventListener('click', () => {
         })
     }
     document.querySelector('.menuGame').classList.toggle('active');
+    git
 })
 
 menuGameButton.addEventListener('click', () => {
