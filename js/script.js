@@ -1,3 +1,12 @@
+// to do:
+// - poprawienie sterowania myszka - przesow
+// - wartosci min i max w ustawieniach
+// - checkbox na gracz/player czy ma byc AI
+
+// do portfolio dac nowosci
+// to do app z data (czerwony expired!, yellow mniej niz dzien, greem spoko)
+// sortowanie
+
 //#region allClasses
 
 class Point {
@@ -284,8 +293,8 @@ const refreshGameWindow = () => {
 
 function mouseSupportForPlayer(e) {
     if (activeGame && activeMouse) {
-        if (e.clientY - canvas.offsetTop > paddlePlayer.middleHeight && e.clientY - canvas.offsetTop < canvas.offsetHeight - paddlePlayer.middleHeight) {
-            paddlePlayer.positionY = e.clientY - canvas.offsetTop - paddlePlayer.middleHeight;
+        if (e.clientY - canvas.offsetTop + window.pageYOffset > paddlePlayer.middleHeight && e.clientY - canvas.offsetTop + window.pageYOffset < canvas.offsetHeight - paddlePlayer.middleHeight) {
+            paddlePlayer.positionY = e.clientY - canvas.offsetTop + window.pageYOffset - paddlePlayer.middleHeight;
         }
     }
 };
