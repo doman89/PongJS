@@ -1,5 +1,4 @@
 // to do:
-// - poprawienie sterowania myszka - przesow
 // - wartosci min i max w ustawieniach
 // - checkbox na gracz/player czy ma byc AI
 
@@ -265,6 +264,8 @@ const optionGame = {
     ballColor: 'white',
     ballSpeed: 2,
 }
+
+const correctColors = ["aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", ];
 //#endregion variables
 
 canvas.width = 1000;
@@ -357,24 +358,35 @@ pauseGameButton.addEventListener('click', () => {
 })
 
 saveButton.addEventListener('click', () => {
+    clearInterval(timer);
     if (document.getElementById('paddelWidthInput').value != optionGame.paddelWidth) {
         optionGame.paddelWidth = document.getElementById('paddelWidthInput').value * 1;
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Paddle.prototype) {
-                object.width = optionGame.paddelWidth;
-            }
-        });
+        if (optionGame.paddelWidth > 5 && optionGame.paddelWidth < canvas.width / 2 - 10)
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Paddle.prototype) {
+                    object.width = optionGame.paddelWidth;
+                }
+            });
+        else {
+            optionGame.paddelWidth = 20;
+            console.log("Error: Wrong value! Set paddel width on 20");
+        }
         refreshGameWindow();
     }
     if (document.getElementById('paddelHeightInput').value != optionGame.paddelHeight) {
         optionGame.paddelHeight = document.getElementById('paddelHeightInput').value * 1;
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Paddle.prototype) {
-                object.height = optionGame.paddelHeight;
-                object.middleHeight = object.height / 2;
-            }
+        if (optionGame.paddelHeight > 5 && optionGame.paddelHeight < canvas.height * 0.9)
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Paddle.prototype) {
+                    object.height = optionGame.paddelHeight;
+                    object.middleHeight = object.height / 2;
+                }
 
-        });
+            });
+        else {
+            optionGame.paddelHeight = 100;
+            console.log("Error: Wrong value! Set paddel height on 100");
+        }
     }
     if (document.getElementById('paddelColorInput').value != optionGame.paddelColor) {
         optionGame.paddelColor = document.getElementById('paddelColorInput').value;
@@ -385,18 +397,29 @@ saveButton.addEventListener('click', () => {
     }
     if (document.getElementById('paddelSpeedInput').value != optionGame.paddelSpeed) {
         optionGame.paddelSpeed = document.getElementById('paddelSpeedInput').value * 1;
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Paddle.prototype)
-                object.speed = optionGame.paddelSpeed;
-        });
+        if (optionGame.paddelSpeed > 0 && optionGame.paddelSpeed < canvas.height * 0.1)
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Paddle.prototype)
+                    object.speed = optionGame.paddelSpeed;
+            });
+        else {
+            optionGame.paddelSpeed = 2;
+            console.log("Error: Wrong value! Set paddel speed on 2");
+        }
     };
     if (document.getElementById('ballSizeInput').value != optionGame.ballSize) {
         optionGame.ballSize = document.getElementById('ballSizeInput').value * 1;
-        ballsGame.forEach(ball => ball.width = ball.height = optionGame.ballSize);
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Ball.prototype)
-                object.width = object.height = optionGame.ballSize;
-        })
+        if (optionGame.ballSize > 0 && optionGame.ballSize < canvas.width * 0.25) {
+            ballsGame.forEach(ball => ball.width = ball.height = optionGame.ballSize);
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Ball.prototype)
+                    object.width = object.height = optionGame.ballSize;
+            })
+        } else {
+            optionGame.ballSize = 20;
+            console.log("Error: Wrong value! Set ball size on 20");
+        }
+
     }
     if (document.getElementById('ballColorInput').value != optionGame.ballColor) {
         optionGame.ballColor = document.getElementById('ballColorInput').value;
@@ -408,14 +431,20 @@ saveButton.addEventListener('click', () => {
     };;
     if (document.getElementById('ballSpeedInput').value != optionGame.ballSpeed) {
         optionGame.ballSpeed = document.getElementById('ballSpeedInput').value * 1;
-        ballsGame.forEach(ball => ball.speed = optionGame.ballSpeed);
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Ball.prototype)
-                object.speed = optionGame.ballSpeed;
-        })
+        if (optionGame.ballSpeed > 0 && optionGame.ballSpeed < canvas.height * 0.1) {
+            ballsGame.forEach(ball => ball.speed = optionGame.ballSpeed);
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Ball.prototype)
+                    object.speed = optionGame.ballSpeed;
+            })
+        } else {
+            optionGame.ballSpeed = 2;
+            console.log("Error: Wrong value! Set ball speed on 2");
+        }
+
     }
     document.querySelector('.menuGame').classList.toggle('active');
-    git
+    timer = setInterval(run, 1000 / 60);
 })
 
 menuGameButton.addEventListener('click', () => {
