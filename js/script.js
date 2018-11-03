@@ -1,10 +1,3 @@
-// to do:
-// - checkbox na gracz/player czy ma byc AI
-
-// do portfolio dac nowosci
-// to do app z data (czerwony expired!, yellow mniej niz dzien, greem spoko)
-// sortowanie
-
 //#region allClasses
 
 class Point {
@@ -27,7 +20,7 @@ class Rectangle extends Point {
 class Paddle extends Rectangle {
     constructor(positionX = 10, positionY, color, width = 20, height = 100) {
         super(positionX, positionY, color, width, height)
-        this.speed = optionGame.ballSpeed;
+        this.speed = optionGame.paddelSpeed;
     }
     autoMove(ballsGame) {
         let minX = canvas.width; //minimal value of distance 
@@ -45,23 +38,26 @@ class Paddle extends Rectangle {
             }
 
         }
-        if (this.positionY + this.middleHeight == ballsGame[n].positionX + ballsGame[n].middleHeight)
-            return;
-        else if (this.positionY + this.middleHeight < ballsGame[n].positionY + ballsGame[n].middleHeight) {
-            if (this.positionY + this.height + 1 > canvas.height)
+        if (minX < canvas.width / 2) {
+            if (this.positionY + this.middleHeight == ballsGame[n].positionX + ballsGame[n].middleHeight)
                 return;
-            else if (this.positionY + this.height + this.speed > canvas.height)
-                this.positionY = canvas.height - this.height;
-            else
-                this.moveDown(ballsGame);
-        } else {
-            if (this.positionY - 1 < 0)
-                return;
-            else if (this.positionY - this.speed < 0)
-                this.positionY = 0;
-            else
-                this.moveUp(ballsGame);
+            else if (this.positionY + this.middleHeight < ballsGame[n].positionY + ballsGame[n].middleHeight) {
+                if (this.positionY + this.height + 1 > canvas.height)
+                    return;
+                else if (this.positionY + this.height + this.speed > canvas.height)
+                    this.positionY = canvas.height - this.height;
+                else
+                    this.moveDown(ballsGame);
+            } else {
+                if (this.positionY - 1 < 0)
+                    return;
+                else if (this.positionY - this.speed < 0)
+                    this.positionY = 0;
+                else
+                    this.moveUp(ballsGame);
+            }
         }
+
     }
     moveUp(collisionObjects) {
         let collision = false;
@@ -200,8 +196,7 @@ class Ball extends Rectangle {
         }
         if (collision) {
             if (Math.round(Math.random())) {
-                if (this.speedX < 4)
-                    this.speedX += difficult + (Math.random() / 10);
+                this.speedX += difficult + (Math.random() / 10);
             } else
                 this.speedY = (Math.random() * optionGame.ballSpeed).toFixed(2) * 1;
             if (collision == 1) {
@@ -259,11 +254,11 @@ let computerAuto = true;
 const optionGame = {
     paddelWidth: 20,
     paddelHeight: 100,
-    paddelSpeed: 2,
+    paddelSpeed: 3,
     paddelColor: 'white',
     ballSize: 20,
     ballColor: 'white',
-    ballSpeed: 2,
+    ballSpeed: 8,
 }
 
 const correctColors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateGray", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"];
@@ -417,7 +412,7 @@ saveButton.addEventListener('click', () => {
                     object.speed = optionGame.paddelSpeed;
             });
         else {
-            optionGame.paddelSpeed = 2;
+            optionGame.paddelSpeed = 3;
             console.log("Error: Wrong value! Set paddel speed on 2");
         }
     };
@@ -457,7 +452,7 @@ saveButton.addEventListener('click', () => {
                     object.speed = optionGame.ballSpeed;
             })
         } else {
-            optionGame.ballSpeed = 2;
+            optionGame.ballSpeed = 8;
             console.log("Error: Wrong value! Set ball speed on 2");
         }
 
