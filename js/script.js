@@ -265,7 +265,7 @@ const optionGame = {
     ballSpeed: 2,
 }
 
-const correctColors = ["aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", ];
+const correctColors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateGray", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"];
 //#endregion variables
 
 canvas.width = 1000;
@@ -357,6 +357,14 @@ pauseGameButton.addEventListener('click', () => {
     activeGame = !activeGame;
 })
 
+const isCorrectColor = color => {
+    for (correctColor of correctColors) {
+        if (correctColor.toLowerCase() == color.toLowerCase())
+            return true;
+    }
+    return false;
+}
+
 saveButton.addEventListener('click', () => {
     clearInterval(timer);
     if (document.getElementById('paddelWidthInput').value != optionGame.paddelWidth) {
@@ -390,10 +398,15 @@ saveButton.addEventListener('click', () => {
     }
     if (document.getElementById('paddelColorInput').value != optionGame.paddelColor) {
         optionGame.paddelColor = document.getElementById('paddelColorInput').value;
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Paddle.prototype)
-                object.color = optionGame.paddelColor;
-        });
+        if (isCorrectColor(optionGame.paddelColor))
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Paddle.prototype)
+                    object.color = optionGame.paddelColor;
+            });
+        else {
+            optionGame.paddelColor = 'white';
+            console.log("Error: Wrong value or this color is not incorrect in JavaScript. Set paddel color on white");
+        }
     }
     if (document.getElementById('paddelSpeedInput').value != optionGame.paddelSpeed) {
         optionGame.paddelSpeed = document.getElementById('paddelSpeedInput').value * 1;
@@ -423,11 +436,16 @@ saveButton.addEventListener('click', () => {
     }
     if (document.getElementById('ballColorInput').value != optionGame.ballColor) {
         optionGame.ballColor = document.getElementById('ballColorInput').value;
-        ballsGame.forEach(ball => ball.color = optionGame.ballColor);
-        collisionObjects.forEach(object => {
-            if (object.__proto__ === Ball.prototype)
-                object.color = optionGame.ballColor;
-        })
+        if (isCorrectColor(optionGame.ballColor)) {
+            ballsGame.forEach(ball => ball.color = optionGame.ballColor);
+            collisionObjects.forEach(object => {
+                if (object.__proto__ === Ball.prototype)
+                    object.color = optionGame.ballColor;
+            })
+        } else {
+            optionGame.paddelColor = 'white';
+            console.log("Error: Wrong value or this color is not incorrect in JavaScript. Set paddel color on white");
+        }
     };;
     if (document.getElementById('ballSpeedInput').value != optionGame.ballSpeed) {
         optionGame.ballSpeed = document.getElementById('ballSpeedInput').value * 1;
