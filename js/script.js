@@ -1,5 +1,4 @@
 // to do:
-// - wartosci min i max w ustawieniach
 // - checkbox na gracz/player czy ma byc AI
 
 // do portfolio dac nowosci
@@ -254,6 +253,8 @@ let gameWidth;
 let difficult = 0.3;
 const playerWins = new scoreBoard;
 const computerWins = new scoreBoard;
+let playerAuto = false;
+let computerAuto = true;
 
 const optionGame = {
     paddelWidth: 20,
@@ -293,7 +294,7 @@ const refreshGameWindow = () => {
 }
 
 function mouseSupportForPlayer(e) {
-    if (activeGame && activeMouse) {
+    if (activeGame && activeMouse && !playerAuto) {
         if (e.clientY - canvas.offsetTop + window.pageYOffset > paddlePlayer.middleHeight && e.clientY - canvas.offsetTop + window.pageYOffset < canvas.offsetHeight - paddlePlayer.middleHeight) {
             paddlePlayer.positionY = e.clientY - canvas.offsetTop + window.pageYOffset - paddlePlayer.middleHeight;
         }
@@ -461,6 +462,10 @@ saveButton.addEventListener('click', () => {
         }
 
     }
+    if (document.getElementById('aiComputerCheckbox').checked != computerAuto)
+        computerAuto = !computerAuto;
+    if (document.getElementById('aiPlayerCheckbox').checked != playerAuto)
+        playerAuto = !playerAuto;
     document.querySelector('.menuGame').classList.toggle('active');
     timer = setInterval(run, 1000 / 60);
 })
@@ -475,6 +480,8 @@ menuGameButton.addEventListener('click', () => {
         document.getElementById('ballSizeInput').value = optionGame.ballSize;
         document.getElementById('ballColorInput').value = optionGame.ballColor;
         document.getElementById('ballSpeedInput').value = optionGame.ballSpeed;
+        document.getElementById('aiPlayerCheckbox').checked = playerAuto;
+        document.getElementById('aiComputerCheckbox').checked = computerAuto;
     }
 })
 
@@ -494,7 +501,10 @@ const run = () => {
         refreshGameWindow();
     clearScreen();
     ballsMove(ballsGame);
-    paddleComputer.autoMove(ballsGame);
+    if (computerAuto)
+        paddleComputer.autoMove(ballsGame);
+    if (playerAuto)
+        paddlePlayer.autoMove(ballsGame);
     drawObject(collisionObjects, ctx);
     updateScore();
     if (playerWins.getPoints() > 9 || computerWins.getPoints() > 9)
